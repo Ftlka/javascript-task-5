@@ -45,6 +45,10 @@ lecturer
         this.wisdom += Math.round(this.focus * 0.1);
         this.focus -= 10;
     })
+    .on('slideeee', students.Sharon, function () {
+        this.wisdom += Math.round(this.focus * 0.15);
+        this.focus -= 5;
+    })
     .on('slide', students.Sally, function () {
         this.wisdom += Math.round(this.focus * 0.15);
         this.focus -= 5;
