@@ -39,7 +39,6 @@ lecturer
     .on('begin', students.Sharon, function () {
         this.focus += 20;
     });
-
 // На каждый слайд внимательность падает, но растет мудрость
 lecturer
     .on('slide', students.Sam, function () {

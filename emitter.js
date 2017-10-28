@@ -4,65 +4,59 @@
  * Сделано задание на звездочку
  * Реализованы методы several и through
  */
-getEmitter.isStar = true;
+getEmitter.isStar = false;
 module.exports = getEmitter;
 
-/**
- * Возвращает новый emitter
- * @returns {Object}
- */
+const callFunc = (events, copyEvent) => events[copyEvent].forEach(person => {
+    person[copyEvent]();
+});
+const getIndex = (events, event, context) => events[event].indexOf(context);
+
 function getEmitter() {
+    let events = {};
+
     return {
-
-        /**
-         * Подписаться на событие
-         * @param {String} event
-         * @param {Object} context
-         * @param {Function} handler
-         */
         on: function (event, context, handler) {
-            console.info(event, context, handler);
+            if (!events.hasOwnProperty(event)) {
+                events[event] = [];
+            }
+            events[event].push(context);
+            context[event] = handler;
+
+            return this;
         },
 
-        /**
-         * Отписаться от события
-         * @param {String} event
-         * @param {Object} context
-         */
         off: function (event, context) {
-            console.info(event, context);
+            const keysAr = Object.keys(events);
+            keysAr.forEach(element => {
+                if (element.startsWith(event)) {
+                    events[element].splice([getIndex(events, element, context)], 1);
+                    delete context[element];
+                }
+            });
+
+            return this;
         },
 
-        /**
-         * Уведомить о событии
-         * @param {String} event
-         */
         emit: function (event) {
-            console.info(event);
-        },
+            let current = event.split('.');
+            let copyEvent = event;
+            for (let i = 0; i < current.length; i++) {
+                if (events.hasOwnProperty(copyEvent)) {
+                    callFunc(events, copyEvent);
+                }
+                copyEvent = copyEvent.substr(0, copyEvent.lastIndexOf('.'));
+            }
 
-        /**
-         * Подписаться на событие с ограничением по количеству полученных уведомлений
-         * @star
-         * @param {String} event
-         * @param {Object} context
-         * @param {Function} handler
-         * @param {Number} times – сколько раз получить уведомление
-         */
-        several: function (event, context, handler, times) {
-            console.info(event, context, handler, times);
-        },
-
-        /**
-         * Подписаться на событие с ограничением по частоте получения уведомлений
-         * @star
-         * @param {String} event
-         * @param {Object} context
-         * @param {Function} handler
-         * @param {Number} frequency – как часто уведомлять
-         */
-        through: function (event, context, handler, frequency) {
-            console.info(event, context, handler, frequency);
+            return this;
         }
+
+        // several: function (event, context, handler, times) {
+        //     return this;
+        // },
+
+        // through: function (event, context, handler, frequency) {
+        //     return this;
+        // }
     };
 }
