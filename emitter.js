@@ -29,7 +29,7 @@ function getEmitter() {
         off: function (event, context) {
             const keysAr = Object.keys(events);
             keysAr.forEach(element => {
-                if ((element).startsWith(event + '.')) {
+                if ((element + '.').startsWith(event + '.')) {
                     events[element].splice([getIndex(events, element, context)], 1);
                     delete context[element];
                 }

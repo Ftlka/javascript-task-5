@@ -24,6 +24,7 @@ var students = {
 
 var lecturer = getEmitter();
 
+
 // С началом лекции у всех резко повышаются показатели
 lecturer
     .on('begin', students.Sam, function () {
@@ -45,10 +46,6 @@ lecturer
         this.wisdom += Math.round(this.focus * 0.1);
         this.focus -= 10;
     })
-    .on('slideeee', students.Sharon, function () {
-        this.wisdom += Math.round(this.focus * 0.15);
-        this.focus -= 5;
-    })
     .on('slide', students.Sally, function () {
         this.wisdom += Math.round(this.focus * 0.15);
         this.focus -= 5;
@@ -56,18 +53,6 @@ lecturer
     .on('slide', students.Bill, function () {
         this.wisdom += Math.round(this.focus * 0.05);
         this.focus -= 10;
-    })
-    .on('slide', students.Sharon, function () {
-        this.wisdom += Math.round(this.focus * 0.01);
-        this.focus -= 5;
-    })
-    .on('slide', students.Sharon, function () {
-        this.wisdom += Math.round(this.focus * 0.01);
-        this.focus -= 5;
-    })
-    .on('slide', students.Sharon, function () {
-        this.wisdom += Math.round(this.focus * 0.01);
-        this.focus -= 5;
     })
     .on('slide', students.Sharon, function () {
         this.wisdom += Math.round(this.focus * 0.01);
@@ -91,10 +76,6 @@ lecturer
     .on('slide.funny', students.Sharon, function () {
         this.focus += 10;
         this.wisdom -= 10;
-    })
-    .on('slide.funny.ff.rot', students.Sam, function () {
-        this.focus += 10;
-        this.wisdom -= 10;
     });
 
 // Начинаем лекцию
@@ -102,7 +83,6 @@ lecturer.emit('begin');
 // Sam(110,50); Sally(110,60); Bill(100,55); Sharon(130,40)
 
 lecturer
-    .emit('slide.funny.ff.rot')
     .emit('slide.text')
     .emit('slide.text')
     .emit('slide.text')
@@ -113,7 +93,6 @@ lecturer
     .off('slide.funny', students.Sharon)
     .emit('slide.text')
     .emit('slide.text')
-    .emit('slide.funny.ff.rot')
     .emit('slide.funny');
 // Sam(50,90); Sally(85,155); Bill(40,62); Sharon(105,37)
 
