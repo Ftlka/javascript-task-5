@@ -45,14 +45,29 @@ function getEmitter() {
             }
 
             return this;
+        },
+
+        several: function (event, context, handler, times) {
+            this.on(event, context, () => {
+                if (times > 0) {
+                    handler.call(context);
+                    times--;
+                }
+            });
+
+            return this;
+        },
+
+        through: function (event, context, handler, frequency) {
+            let idx = 0;
+            this.on(event, context, () => {
+                if (idx % frequency === 0) {
+                    handler.call(context);
+                }
+                idx++;
+            });
+
+            return this;
         }
-
-        // several: function (event, context, handler, times) {
-        //     return this;
-        // },
-
-        // through: function (event, context, handler, frequency) {
-        //     return this;
-        // }
     };
 }
