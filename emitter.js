@@ -1,16 +1,12 @@
 'use strict';
 
-/**
- * Сделано задание на звездочку
- * Реализованы методы several и through
- */
 getEmitter.isStar = false;
 module.exports = getEmitter;
 
 const callFunc = (events, copyEvent) => events[copyEvent].forEach(person => {
-    person[copyEvent]();
+    person.handler.call(person.context);
 });
-const getIndex = (events, event, context) => events[event].indexOf(context);
+
 
 function getEmitter() {
     let events = {};
@@ -20,18 +16,19 @@ function getEmitter() {
             if (!events.hasOwnProperty(event)) {
                 events[event] = [];
             }
-            events[event].push(context);
-            context[event] = handler;
+            events[event].push({ context, handler });
 
             return this;
         },
 
         off: function (event, context) {
-            const keysAr = Object.keys(events);
-            keysAr.forEach(element => {
+            Object.keys(events).forEach(element => {
                 if ((element + '.').startsWith(event + '.')) {
-                    events[element].splice([getIndex(events, element, context)], 1);
-                    delete context[element];
+                    events[element].forEach((person, idx) => {
+                        if (context === person.context) {
+                            events[element].splice(idx, 1);
+                        }
+                    });
                 }
             });
 
@@ -39,13 +36,12 @@ function getEmitter() {
         },
 
         emit: function (event) {
-            let current = event.split('.');
-            let copyEvent = event;
-            for (let i = 0; i < current.length; i++) {
-                if (events.hasOwnProperty(copyEvent)) {
-                    callFunc(events, copyEvent);
+            const loops = event.split('.').length;
+            for (let i = 0; i < loops; i++) {
+                if (events.hasOwnProperty(event)) {
+                    callFunc(events, event);
                 }
-                copyEvent = copyEvent.substr(0, copyEvent.lastIndexOf('.'));
+                event = event.substr(0, event.lastIndexOf('.'));
             }
 
             return this;
