@@ -1,6 +1,6 @@
 'use strict';
 
-getEmitter.isStar = false;
+getEmitter.isStar = true;
 module.exports = getEmitter;
 
 const callFunc = (events, copyEvent) => events[copyEvent].forEach(person => {
