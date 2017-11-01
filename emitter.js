@@ -9,7 +9,7 @@ const callFunc = (events, copyEvent) => events[copyEvent].forEach(person => {
 
 
 function getEmitter() {
-    let events = {};
+    const events = {};
 
     return {
         on: function (event, context, handler) {
@@ -21,16 +21,17 @@ function getEmitter() {
             return this;
         },
 
+
         off: function (event, context) {
-            Object.keys(events).forEach(element => {
-                if ((element + '.').startsWith(event + '.')) {
-                    events[element].forEach((person, idx) => {
+            Object.keys(events)
+                .filter(element => (element + '.').startsWith(event + '.'))
+                .forEach(key => {
+                    events[key].forEach((person, idx) => {
                         if (context === person.context) {
-                            events[element].splice(idx, 1);
+                            events[key].splice(idx, 1);
                         }
                     });
-                }
-            });
+                });
 
             return this;
         },
